@@ -56,8 +56,17 @@
         <string id="PLG_MEMBERMAP_LONGITUDE_FIELD">
             <text>Längengrad-Feld</text>
         </string>
+        <string id="PLG_MEMBERMAP_ADDRESS_MODE">
+            <text>Adressmodus</text>
+        </string>
+        <string id="PLG_MEMBERMAP_ADDRESS_MODE_SINGLE">
+            <text>Einzelnes Adressfeld</text>
+        </string>
+        <string id="PLG_MEMBERMAP_ADDRESS_MODE_MULTIPLE">
+            <text>Mehrere Adressfelder</text>
+        </string>
         <string id="PLG_MEMBERMAP_ADDRESS_FIELDS">
-            <text>Adressfelder</text>
+            <text>Adressfeld(er)</text>
         </string>
         <string id="PLG_MEMBERMAP_GEOCODING_SERVICE">
             <text>Geocoding-Dienst</text>

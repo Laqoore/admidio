@@ -48,8 +48,14 @@ try {
     if (!isset($plg_longitude_field) || $plg_longitude_field === '') {
         $plg_longitude_field = 'LONGITUDE';
     }
+    if (!isset($plg_address_mode) || $plg_address_mode === '') {
+        $plg_address_mode = 'multiple';
+    }
     if (!isset($plg_address_fields) || !is_array($plg_address_fields)) {
         $plg_address_fields = array('STREET', 'POSTCODE', 'CITY', 'COUNTRY');
+    }
+    if (!isset($plg_single_address_field) || $plg_single_address_field === '') {
+        $plg_single_address_field = 'ADDRESS';
     }
     if (!isset($plg_geocoding_service) || $plg_geocoding_service === '') {
         $plg_geocoding_service = 'nominatim';
@@ -75,7 +81,9 @@ try {
         $user,
         $plg_address_fields,
         $plg_latitude_field,
-        $plg_longitude_field
+        $plg_longitude_field,
+        $plg_address_mode,
+        $plg_single_address_field
     )) {
         echo json_encode([
             'success' => true,
@@ -85,8 +93,13 @@ try {
         exit;
     }
 
-    // Build address
-    $address = GeocodingService::buildAddressFromUser($user, $plg_address_fields);
+    // Build address based on mode
+    $address = GeocodingService::buildAddress(
+        $user,
+        $plg_address_mode,
+        $plg_address_fields,
+        $plg_single_address_field
+    );
 
     if (empty($address)) {
         echo json_encode([

@@ -43,8 +43,14 @@ try {
     if (!isset($plg_longitude_field) || $plg_longitude_field === '') {
         $plg_longitude_field = 'LONGITUDE';
     }
+    if (!isset($plg_address_mode) || $plg_address_mode === '') {
+        $plg_address_mode = 'multiple';
+    }
     if (!isset($plg_address_fields) || !is_array($plg_address_fields)) {
         $plg_address_fields = array('STREET', 'POSTCODE', 'CITY', 'COUNTRY');
+    }
+    if (!isset($plg_single_address_field) || $plg_single_address_field === '') {
+        $plg_single_address_field = 'ADDRESS';
     }
     if (!isset($plg_geocoding_service) || $plg_geocoding_service === '') {
         $plg_geocoding_service = 'nominatim';
@@ -78,12 +84,21 @@ try {
         $roleParams[] = $geocodeRole;
     }
 
-    // Get address field IDs
+    // Get address field IDs based on address mode
     $addressFieldIds = [];
-    foreach ($plg_address_fields as $field) {
-        $fieldId = $gProfileFields->getProperty($field, 'usf_id');
+    if ($plg_address_mode === 'single') {
+        // Single address field mode
+        $fieldId = $gProfileFields->getProperty($plg_single_address_field, 'usf_id');
         if ($fieldId !== null) {
             $addressFieldIds[] = $fieldId;
+        }
+    } else {
+        // Multiple address fields mode
+        foreach ($plg_address_fields as $field) {
+            $fieldId = $gProfileFields->getProperty($field, 'usf_id');
+            if ($fieldId !== null) {
+                $addressFieldIds[] = $fieldId;
+            }
         }
     }
 
@@ -92,7 +107,7 @@ try {
             'success' => 0,
             'failed' => 0,
             'skipped' => 0,
-            'errors' => ['No address fields configured']
+            'errors' => ['No address fields configured or fields not found']
         ]);
         exit;
     }
@@ -152,14 +167,16 @@ try {
         $plg_geocoding_delay
     );
 
-    // Initialize batch processor
+    // Initialize batch processor with address mode configuration
     $batchProcessor = new GeocodingBatchProcessor(
         $geocodingService,
         $gDb,
         $gProfileFields,
         $plg_address_fields,
         $plg_latitude_field,
-        $plg_longitude_field
+        $plg_longitude_field,
+        $plg_address_mode,
+        $plg_single_address_field
     );
 
     // Process all users

@@ -189,7 +189,7 @@ class GeocodingService
     }
 
     /**
-     * Build address string from user profile fields
+     * Build address string from user profile fields (multiple fields mode)
      *
      * @param \Admidio\Users\Entity\User $user User object
      * @param array $addressFields Array of profile field names
@@ -210,19 +210,56 @@ class GeocodingService
     }
 
     /**
+     * Build address string from a single address field
+     *
+     * @param \Admidio\Users\Entity\User $user User object
+     * @param string $addressField Single address field name
+     * @return string Address string
+     */
+    public static function buildAddressFromSingleField(\Admidio\Users\Entity\User $user, string $addressField): string
+    {
+        return trim($user->getValue($addressField));
+    }
+
+    /**
+     * Build address string based on address mode configuration
+     *
+     * @param \Admidio\Users\Entity\User $user User object
+     * @param string $addressMode 'single' or 'multiple'
+     * @param array $addressFields Array of profile field names (for multiple mode)
+     * @param string $singleAddressField Single address field name (for single mode)
+     * @return string Address string
+     */
+    public static function buildAddress(
+        \Admidio\Users\Entity\User $user,
+        string $addressMode,
+        array $addressFields,
+        string $singleAddressField
+    ): string {
+        if ($addressMode === 'single') {
+            return self::buildAddressFromSingleField($user, $singleAddressField);
+        }
+        return self::buildAddressFromUser($user, $addressFields);
+    }
+
+    /**
      * Check if user's address has changed compared to stored coordinates
      *
      * @param \Admidio\Users\Entity\User $user User object
      * @param array $addressFields Array of profile field names
      * @param string $latitudeField Latitude field name
      * @param string $longitudeField Longitude field name
+     * @param string $addressMode 'single' or 'multiple' (default: 'multiple')
+     * @param string $singleAddressField Single address field name (for single mode)
      * @return bool True if address might have changed (coordinates missing or address updated)
      */
     public static function addressNeedsGeocoding(
         \Admidio\Users\Entity\User $user,
         array $addressFields,
         string $latitudeField,
-        string $longitudeField
+        string $longitudeField,
+        string $addressMode = 'multiple',
+        string $singleAddressField = ''
     ): bool {
         // Check if coordinates are missing
         $lat = trim($user->getValue($latitudeField));
@@ -230,7 +267,7 @@ class GeocodingService
 
         if (empty($lat) || empty($lng)) {
             // Check if there's an address to geocode
-            $address = self::buildAddressFromUser($user, $addressFields);
+            $address = self::buildAddress($user, $addressMode, $addressFields, $singleAddressField);
             return !empty($address);
         }
 
@@ -263,7 +300,7 @@ class GeocodingBatchProcessor
     /** @var \Admidio\Users\Entity\ProfileFields */
     private $profileFields;
 
-    /** @var array Address field names */
+    /** @var array Address field names (for multiple mode) */
     private array $addressFields;
 
     /** @var string Latitude field name */
@@ -271,6 +308,12 @@ class GeocodingBatchProcessor
 
     /** @var string Longitude field name */
     private string $longitudeField;
+
+    /** @var string Address mode ('single' or 'multiple') */
+    private string $addressMode;
+
+    /** @var string Single address field name (for single mode) */
+    private string $singleAddressField;
 
     /** @var array Processing results */
     private array $results = [
@@ -286,9 +329,11 @@ class GeocodingBatchProcessor
      * @param GeocodingService $geocodingService
      * @param mixed $db Database instance
      * @param mixed $profileFields ProfileFields instance
-     * @param array $addressFields Address field names
+     * @param array $addressFields Address field names (for multiple mode)
      * @param string $latitudeField Latitude field name
      * @param string $longitudeField Longitude field name
+     * @param string $addressMode 'single' or 'multiple' (default: 'multiple')
+     * @param string $singleAddressField Single address field name (for single mode)
      */
     public function __construct(
         GeocodingService $geocodingService,
@@ -296,7 +341,9 @@ class GeocodingBatchProcessor
         $profileFields,
         array $addressFields,
         string $latitudeField,
-        string $longitudeField
+        string $longitudeField,
+        string $addressMode = 'multiple',
+        string $singleAddressField = ''
     ) {
         $this->geocodingService = $geocodingService;
         $this->db = $db;
@@ -304,6 +351,8 @@ class GeocodingBatchProcessor
         $this->addressFields = $addressFields;
         $this->latitudeField = $latitudeField;
         $this->longitudeField = $longitudeField;
+        $this->addressMode = $addressMode;
+        $this->singleAddressField = $singleAddressField;
     }
 
     /**
@@ -323,14 +372,21 @@ class GeocodingBatchProcessor
             $user,
             $this->addressFields,
             $this->latitudeField,
-            $this->longitudeField
+            $this->longitudeField,
+            $this->addressMode,
+            $this->singleAddressField
         )) {
             $this->results['skipped']++;
             return true;
         }
 
-        // Build address
-        $address = GeocodingService::buildAddressFromUser($user, $this->addressFields);
+        // Build address based on mode
+        $address = GeocodingService::buildAddress(
+            $user,
+            $this->addressMode,
+            $this->addressFields,
+            $this->singleAddressField
+        );
 
         if (empty($address)) {
             $this->results['skipped']++;

@@ -43,8 +43,14 @@ try {
     if (!isset($plg_longitude_field) || $plg_longitude_field === '') {
         $plg_longitude_field = 'LONGITUDE';
     }
+    if (!isset($plg_address_mode) || $plg_address_mode === '') {
+        $plg_address_mode = 'multiple';
+    }
     if (!isset($plg_address_fields) || !is_array($plg_address_fields)) {
         $plg_address_fields = array('STREET', 'POSTCODE', 'CITY', 'COUNTRY');
+    }
+    if (!isset($plg_single_address_field) || $plg_single_address_field === '') {
+        $plg_single_address_field = 'ADDRESS';
     }
     if (!isset($plg_geocoding_service) || $plg_geocoding_service === '') {
         $plg_geocoding_service = 'nominatim';
@@ -90,12 +96,19 @@ try {
         $statement = $gDb->queryPrepared($sql, [DATE_NOW, DATE_NOW, $gCurrentOrgId]);
         $stats['total_members'] = (int) $statement->fetchColumn();
 
-        // Get address field IDs
+        // Get address field IDs based on address mode
         $addressFieldIds = [];
-        foreach ($plg_address_fields as $field) {
-            $fieldId = $gProfileFields->getProperty($field, 'usf_id');
+        if ($plg_address_mode === 'single') {
+            $fieldId = $gProfileFields->getProperty($plg_single_address_field, 'usf_id');
             if ($fieldId !== null) {
                 $addressFieldIds[] = $fieldId;
+            }
+        } else {
+            foreach ($plg_address_fields as $field) {
+                $fieldId = $gProfileFields->getProperty($field, 'usf_id');
+                if ($fieldId !== null) {
+                    $addressFieldIds[] = $fieldId;
+                }
             }
         }
 
@@ -319,8 +332,12 @@ try {
                         <td><code>' . SecurityUtils::encodeHTML($plg_longitude_field) . '</code></td>
                     </tr>
                     <tr>
+                        <th>' . $gL10n->get('PLG_MEMBERMAP_ADDRESS_MODE') . '</th>
+                        <td>' . ($plg_address_mode === 'single' ? $gL10n->get('PLG_MEMBERMAP_ADDRESS_MODE_SINGLE') : $gL10n->get('PLG_MEMBERMAP_ADDRESS_MODE_MULTIPLE')) . '</td>
+                    </tr>
+                    <tr>
                         <th>' . $gL10n->get('PLG_MEMBERMAP_ADDRESS_FIELDS') . '</th>
-                        <td><code>' . SecurityUtils::encodeHTML(implode(', ', $plg_address_fields)) . '</code></td>
+                        <td><code>' . ($plg_address_mode === 'single' ? SecurityUtils::encodeHTML($plg_single_address_field) : SecurityUtils::encodeHTML(implode(', ', $plg_address_fields))) . '</code></td>
                     </tr>
                     <tr>
                         <th>' . $gL10n->get('PLG_MEMBERMAP_GEOCODING_SERVICE') . '</th>

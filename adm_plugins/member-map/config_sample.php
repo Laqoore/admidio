@@ -24,10 +24,35 @@ $plg_latitude_field = 'LATITUDE';
 $plg_longitude_field = 'LONGITUDE';
 
 /**
+ * Address mode: 'multiple' or 'single'
+ * - 'multiple': Address is split across multiple fields (STREET, POSTCODE, CITY, COUNTRY)
+ * - 'single': Complete address is stored in a single field
+ *
+ * Adressmodus: 'multiple' oder 'single'
+ * - 'multiple': Adresse ist auf mehrere Felder aufgeteilt (STREET, POSTCODE, CITY, COUNTRY)
+ * - 'single': Vollständige Adresse ist in einem einzelnen Feld gespeichert
+ */
+$plg_address_mode = 'multiple';
+
+/**
  * Address fields used for geocoding (combined to form the full address)
+ * Only used when $plg_address_mode = 'multiple'
+ *
  * Adressfelder für Geocoding (werden zur vollständigen Adresse kombiniert)
+ * Nur verwendet wenn $plg_address_mode = 'multiple'
  */
 $plg_address_fields = array('STREET', 'POSTCODE', 'CITY', 'COUNTRY');
+
+/**
+ * Single address field name (when address is stored in one field)
+ * Only used when $plg_address_mode = 'single'
+ * Example: 'ADDRESS' or 'FULL_ADDRESS' or any custom field name
+ *
+ * Name des einzelnen Adressfelds (wenn Adresse in einem Feld gespeichert ist)
+ * Nur verwendet wenn $plg_address_mode = 'single'
+ * Beispiel: 'ADDRESS' oder 'FULL_ADDRESS' oder ein benutzerdefinierter Feldname
+ */
+$plg_single_address_field = 'ADDRESS';
 
 /**
  * Geocoding service to use:
