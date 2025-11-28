@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language name="English">
+    <version>1.0</version>
+    <author>Admidio Team</author>
+    <lastChange>2024-01-01</lastChange>
+    <strings>
+        <!-- General -->
+        <string id="PLG_MEMBERMAP_HEADLINE">
+            <text>Member Map</text>
+        </string>
+        <string id="PLG_MEMBERMAP_ADMIN">
+            <text>Map Administration</text>
+        </string>
+        <string id="PLG_MEMBERMAP_BACK_TO_MAP">
+            <text>Back to Map</text>
+        </string>
+
+        <!-- Status -->
+        <string id="PLG_MEMBERMAP_STATUS">
+            <text>Status</text>
+        </string>
+        <string id="PLG_MEMBERMAP_WITH_ADDRESS">
+            <text>With Address</text>
+        </string>
+        <string id="PLG_MEMBERMAP_WITH_COORDINATES">
+            <text>With Coordinates</text>
+        </string>
+        <string id="PLG_MEMBERMAP_WITHOUT_COORDINATES">
+            <text>Without Coordinates</text>
+        </string>
+
+        <!-- Fields -->
+        <string id="PLG_MEMBERMAP_FIELDS_MISSING">
+            <text>Coordinate fields are missing!</text>
+        </string>
+        <string id="PLG_MEMBERMAP_FIELDS_MISSING_DESC">
+            <text>The profile fields "%1" and "%2" must be created in the Admidio profile fields to store coordinates.</text>
+        </string>
+        <string id="PLG_MEMBERMAP_FIELDS_CONFIGURED">
+            <text>Coordinate fields are configured: %1 and %2</text>
+        </string>
+        <string id="PLG_MEMBERMAP_CREATE_FIELDS_HINT">
+            <text>Please create the following profile fields of type "Text" in the profile settings: LATITUDE and LONGITUDE. You can mark these fields as "hidden" so they are not displayed in the profile.</text>
+        </string>
+        <string id="PLG_MEMBERMAP_COORDINATE_FIELDS_MISSING">
+            <text>The coordinate profile fields were not found. Please configure the plugin.</text>
+        </string>
+
+        <!-- Configuration -->
+        <string id="PLG_MEMBERMAP_CONFIGURATION">
+            <text>Configuration</text>
+        </string>
+        <string id="PLG_MEMBERMAP_LATITUDE_FIELD">
+            <text>Latitude Field</text>
+        </string>
+        <string id="PLG_MEMBERMAP_LONGITUDE_FIELD">
+            <text>Longitude Field</text>
+        </string>
+        <string id="PLG_MEMBERMAP_ADDRESS_FIELDS">
+            <text>Address Fields</text>
+        </string>
+        <string id="PLG_MEMBERMAP_GEOCODING_SERVICE">
+            <text>Geocoding Service</text>
+        </string>
+        <string id="PLG_MEMBERMAP_CONFIG_HINT">
+            <text>The configuration can be adjusted in the config.php file in the plugin directory.</text>
+        </string>
+
+        <!-- Geocoding -->
+        <string id="PLG_MEMBERMAP_BATCH_GEOCODING">
+            <text>Batch Geocoding</text>
+        </string>
+        <string id="PLG_MEMBERMAP_BATCH_GEOCODING_DESC">
+            <text>Here you can determine coordinates for multiple members at once. The geocoding service converts addresses into geographic coordinates.</text>
+        </string>
+        <string id="PLG_MEMBERMAP_GEOCODE_MODE">
+            <text>Geocoding Mode</text>
+        </string>
+        <string id="PLG_MEMBERMAP_GEOCODE_MISSING_ONLY">
+            <text>Determine missing coordinates only</text>
+        </string>
+        <string id="PLG_MEMBERMAP_GEOCODE_ALL">
+            <text>Re-determine all coordinates</text>
+        </string>
+        <string id="PLG_MEMBERMAP_FILTER_BY_ROLE">
+            <text>Filter by Role</text>
+        </string>
+        <string id="PLG_MEMBERMAP_GEOCODING_RATE_LIMIT">
+            <text>Note: The geocoding service only allows one request every %1 seconds. Processing may take some time for many members.</text>
+        </string>
+        <string id="PLG_MEMBERMAP_START_GEOCODING">
+            <text>Start Geocoding</text>
+        </string>
+
+        <!-- Progress -->
+        <string id="PLG_MEMBERMAP_PROGRESS">
+            <text>Progress</text>
+        </string>
+        <string id="PLG_MEMBERMAP_PROCESSING">
+            <text>Processing...</text>
+        </string>
+        <string id="PLG_MEMBERMAP_INITIALIZING">
+            <text>Initializing...</text>
+        </string>
+        <string id="PLG_MEMBERMAP_COMPLETED">
+            <text>Completed</text>
+        </string>
+
+        <!-- Results -->
+        <string id="PLG_MEMBERMAP_RESULTS">
+            <text>Results</text>
+        </string>
+        <string id="PLG_MEMBERMAP_SUCCESSFUL">
+            <text>Successful</text>
+        </string>
+        <string id="PLG_MEMBERMAP_FAILED">
+            <text>Failed</text>
+        </string>
+        <string id="PLG_MEMBERMAP_SKIPPED">
+            <text>Skipped</text>
+        </string>
+        <string id="PLG_MEMBERMAP_ERRORS">
+            <text>Errors</text>
+        </string>
+
+        <!-- Map -->
+        <string id="PLG_MEMBERMAP_NO_MEMBERS_ON_MAP">
+            <text>No members with coordinates found.</text>
+        </string>
+        <string id="PLG_MEMBERMAP_SHOW_ON_MAP">
+            <text>Show on Map</text>
+        </string>
+    </strings>
+</language>
